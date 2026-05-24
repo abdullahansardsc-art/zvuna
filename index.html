@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zvuna - Classic Heritage Khussa</title>
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-green: #2f4133;
+            --accent-gold: #9d6f2b;
+            --accent-gold-hover: #b58237;
+            --brand-cream: #f9efe6; 
+            --white: #ffffff;
+            --text-dark: #1c261e;
+            --text-muted: #5c665e;
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--brand-cream);
+            color: var(--text-dark);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            padding: 2.5rem 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, rgba(249,239,230,1), rgba(249,239,230,0));
+            z-index: 10;
+        }
+
+        .logo-container {
+            text-align: center;
+            animation: fadeInUp 1s var(--transition);
+        }
+
+        .logo-text {
+            color: var(--primary-green);
+            font-size: 2.8rem;
+            letter-spacing: 6px;
+            font-weight: 500;
+            position: relative;
+            display: inline-block;
+            line-height: 1.2;
+        }
+        
+        .logo-text::after {
+            content: "";
+            position: absolute;
+            top: -8px;
+            right: 22px;
+            width: 8px;
+            height: 14px;
+            background-color: var(--accent-gold);
+            border-radius: 0 100% 0 100%;
+            transform: rotate(35deg);
+        }
+
+        .tagline-heritage {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Showcase Grid Layout */
+        .showcase-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 8% 6rem 8%;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 6rem;
+            animation: fadeInUp 1.2s var(--transition);
+        }
+
+        @media (max-width: 1024px) {
+            .showcase-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 1rem 5% 4rem 5%;
+            }
+        }
+
+        /* Multi-Image Gallery Layout */
+        .gallery-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .image-frame {
+            position: relative;
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 2px;
+            box-shadow: 0 30px 70px rgba(47, 65, 51, 0.05);
+            border: 1px solid rgba(157, 111, 43, 0.12);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 5 / 4;
+        }
+
+        .image-frame::before {
+            content: "";
+            position: absolute;
+            inset: 1rem;
+            border: 1px solid rgba(157, 111, 43, 0.08);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .main-product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+        }
+
+        .image-frame:hover .main-product-img {
+            transform: scale(1.03);
+        }
+
+        /* Thumbnail Grid Layout */
+        .thumbnail-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .thumbnail-item {
+            background-color: var(--white);
+            padding: 0.5rem;
+            border: 1px solid rgba(157, 111, 43, 0.15);
+            border-radius: 2px;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            transition: var(--transition);
+            opacity: 0.6;
+        }
+
+        .thumbnail-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .thumbnail-item:hover, .thumbnail-item.active {
+            opacity: 1;
+            border-color: var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(47, 65, 51, 0.08);
+        }
+
+        /* Product Details Panel */
+        .details-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 1rem;
+        }
+
+        .collection-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .details-panel h1 {
+            font-size: 3.2rem;
+            color: var(--primary-green);
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+        }
+
+        .price-badge {
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            font-family: 'Playfair Display', serif;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .price-badge span {
+            color: var(--accent-gold);
+        }
+
+        .product-essence {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 1.5rem;
+        }
+
+        .luxury-specs {
+            list-style: none;
+            margin-bottom: 3.5rem;
+        }
+
+        .luxury-specs li {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            color: var(--primary-green);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .luxury-specs li::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Premium Buttons Styling */
+        .action-cta-btn, .btn-contact-submit {
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: 1px solid var(--primary-green);
+            padding: 1.4rem 3rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(47, 65, 51, 0.12);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .action-cta-btn::before, .btn-contact-submit::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 100%;
+            background-color: var(--white);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .action-cta-btn:hover, .btn-contact-submit:hover {
+            color: var(--primary-green);
+            box-shadow: 0 15px 40px rgba(47, 65, 51, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .action-cta-btn:hover::before, .btn-contact-submit:hover::before {
+            width: 100%;
+        }
+
+        .editorial-faq-block {
+            background-color: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(10px);
+            padding: 6rem 8%;
+            border-top: 1px solid rgba(157, 111, 43, 0.15);
+        }
+
+        .editorial-faq-block h2 {
+            text-align: center;
+            color: var(--primary-green);
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .accordion-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .accordion-node {
+            border-bottom: 1px solid rgba(47, 65, 51, 0.08);
+            padding: 2rem 0;
+            transition: var(--transition);
+        }
+
+        .accordion-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: var(--primary-green);
+            user-select: none;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .accordion-node.active .accordion-content {
+            max-height: 160px;
+            margin-top: 1.25rem;
+        }
+
+        .icon-indicator {
+            font-size: 1.1rem;
+            color: var(--accent-gold);
+            transition: transform 0.4s ease;
+        }
+
+        .accordion-node.active .icon-indicator {
+            transform: rotate(45deg);
+        }
+
+        /* Consistent Aesthetic Contact Section */
+        .contact-section {
+            padding: 6rem 8%;
+            border-top: 1px solid rgba(157, 111, 43, 0.15);
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        @media (max-width: 1024px) {
+            .contact-section {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                padding: 4rem 5%;
+            }
+        }
+
+        .contact-info-panel h2 {
+            font-size: 2.8rem;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info-panel p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 3rem;
+            max-width: 480px;
+        }
+
+        .contact-meta-item {
+            margin-bottom: 2rem;
+        }
+
+        .contact-meta-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .contact-meta-value {
+            font-size: 1.2rem;
+            color: var(--primary-green);
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .contact-meta-value:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Framed Contact Form Component */
+        .contact-form-frame {
+            position: relative;
+            background-color: var(--white);
+            padding: 3.5rem 3rem;
+            border-radius: 2px;
+            box-shadow: 0 30px 70px rgba(47, 65, 51, 0.05);
+            border: 1px solid rgba(157, 111, 43, 0.12);
+        }
+
+        .contact-form-frame::before {
+            content: "";
+            position: absolute;
+            inset: 1rem;
+            border: 1px solid rgba(157, 111, 43, 0.08);
+            pointer-events: none;
+        }
+
+        .contact-form {
+            position: relative;
+            z-index: 5;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 1.1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(47, 65, 51, 0.15);
+            background-color: var(--brand-cream);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            border-color: var(--accent-gold);
+            background-color: var(--white);
+            box-shadow: 0 4px 12px rgba(157, 111, 43, 0.04);
+        }
+
+        .contact-form textarea {
+            height: 130px;
+            resize: none;
+        }
+
+        .btn-contact-submit {
+            width: 100%;
+            padding: 1.2rem;
+        }
+
+        .contact-message-box {
+            margin-top: 1rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* Checkout Overlay Modal Layout */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(28, 38, 30, 0.5);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            z-index: 1000;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background-color: var(--brand-cream);
+            padding: 4rem 3rem;
+            width: 92%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 40px 90px rgba(28, 38, 30, 0.25);
+            border: 1px solid rgba(157, 111, 43, 0.25);
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.open .modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--primary-green);
+            line-height: 0.5;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--accent-gold);
+        }
+
+        .modal-box h3 {
+            font-size: 2.2rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .modal-box p {
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+
+        .modal-form input[type="email"] {
+            width: 100%;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(47, 65, 51, 0.15);
+            background-color: var(--white);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .modal-form input[type="email"]:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .btn-submit {
+            background-color: var(--accent-gold);
+            color: var(--white);
+            border: none;
+            padding: 1.2rem;
+            width: 100%;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-gold-hover);
+        }
+
+        .message-box {
+            margin-top: 1.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-text">ZVUNA</div>
+            <div class="tagline-heritage">Classic Heritage</div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Showcase Layout Grid -->
+        <section class="showcase-container">
+            <div class="gallery-wrapper">
+                <div class="image-frame">
+                    <img src="1.png" alt="Main Luxury Handcrafted Khussa" class="main-product-img" id="mainProductView">
+                </div>
+                
+                <!-- Thumbnails representing product angles -->
+                <div class="thumbnail-container">
+                    <div class="thumbnail-item active" onclick="switchProductPhoto(this, '1.png')">
+                        <img src="1.png" alt="Main Front View">
+                    </div>
+                    <div class="thumbnail-item" onclick="switchProductPhoto(this, '2.png')">
+                        <img src="2.png" alt="Double Inner Padding Details">
+                    </div>
+                    <div class="thumbnail-item" onclick="switchProductPhoto(this, '3.png')">
+                        <img src="3.png" alt="Side Structure Profile">
+                    </div>
+                    <div class="thumbnail-item" onclick="switchProductPhoto(this, '4.png')">
+                        <img src="4.png" alt="Artisanal Handcraft Close-up">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="details-panel">
+                <span class="collection-label">Artisanal Masterpiece</span>
+                <h1>The Heritage Khussa</h1>
+                <div class="price-badge">Rs. <span>2,100</span></div>
+                
+                <p class="product-essence">
+                    A refined expression of historical elegance. Meticulously brought to life by generational artisans, this signature piece pairs clean cultural styling with innovative comfort architecture.
+                </p>
+                
+                <ul class="luxury-specs">
+                    <li>Integrated premium double padding layers</li>
+                    <li>Sourced from elite, exceptionally soft material blends</li>
+                    <li>Designed fluidly to protect completely against shoe bites</li>
+                    <li>100% genuine handcrafted design configuration</li>
+                </ul>
+
+                <button class="action-cta-btn" id="btnBuyNow">Acquire Now</button>
+            </div>
+        </section>
+
+        <!-- FAQs Section -->
+        <section class="editorial-faq-block">
+            <h2>Heritage & Experience</h2>
+            <div class="accordion-wrapper">
+                
+                <div class="accordion-node">
+                    <div class="accordion-trigger">
+                        <span>Are these khussas authentically hand-crafted?</span>
+                        <span class="icon-indicator">┼</span>
+                    </div>
+                    <div class="accordion-content">
+                        Yes, every single pair is explicitly shaped and structured by master local craftsmen. By utilizing ancestral methods, we guarantee a true classic heritage product tailored to perfection.
+                    </div>
+                </div>
+
+                <div class="accordion-node">
+                    <div class="accordion-trigger">
+                        <span>What type of material architecture is used?</span>
+                        <span class="icon-indicator">┼</span>
+                    </div>
+                    <div class="accordion-content">
+                        We prioritize healthy foot kinetics. Built using premier, incredibly soft material choices, our shoes conform gracefully to your foot profile, completely omitting standard new shoe stiffness or bites.
+                    </div>
+                </div>
+
+                <div class="accordion-node">
+                    <div class="accordion-trigger">
+                        <span>How does the double cushioning feel?</span>
+                        <span class="icon-indicator">┼</span>
+                    </div>
+                    <div class="accordion-content">
+                        Unlike traditional hard flat footwear options, our specialty design implements a micro-engineered double layer of luxury padding right into the solebed to give a cushioned footprint all day.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Brand-Aligned Contact Section -->
+        <section class="contact-section">
+            <div class="contact-info-panel">
+                <h2>Conceived for Connoisseurs</h2>
+                <p>Have individual queries regarding custom sizing batches, personalized bridal embroidery coordinates, or corporate delivery parameters? Contact our dedicated support desk.</p>
+                
+                <div class="contact-meta-item">
+                    <div class="contact-meta-label">Client Concierge</div>
+                    <a href="mailto:care@zvuna.com" class="contact-meta-value">care@zvuna.com</a>
+                </div>
+                
+                <div class="contact-meta-item">
+                    <div class="contact-meta-label">Atelier Location</div>
+                    <div class="contact-meta-value" style="cursor: default;">Islamabad, Pakistan</div>
+                </div>
+            </div>
+
+            <div class="contact-form-frame">
+                <div class="contact-form">
+                    <form id="directContactForm">
+                        <input type="text" id="contactName" placeholder="Your Full Name" required>
+                        <input type="email" id="contactEmail" placeholder="Your Email Address" required>
+                        <textarea id="contactMessage" placeholder="How may our atelier assist you?" required></textarea>
+                        <button type="submit" class="btn-contact-submit" id="btnContactSubmit">Send Message</button>
+                    </form>
+                    <div class="contact-message-box" id="contactMsgBox"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Overlay Purchase Dialog Panel -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <h3>Secure Entry</h3>
+            <p>Enter your email registry below. Our concierge service will reach out immediately to manage your exact fit configuration and dispatch logistics.</p>
+            
+            <form class="modal-form" id="purchaseForm">
+                <input type="email" id="customerEmail" placeholder="Your premium email address" required>
+                <button type="submit" class="btn-submit" id="btnSubmitForm">Request Selection</button>
+            </form>
+            <div class="message-box" id="msgBox"></div>
+        </div>
+    </div>
+
+    <!-- Complete Integrated Live JavaScript Panel -->
+    <script>
+        // Form Action Destination Macro URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwV-jEQz7txihbN1rDY7PFHfHhHKlCyuSJL-Bg5VVWesGUq3LwTqImwrANFP-bl3_UzQw/exec';
+
+        const btnBuyNow = document.getElementById('btnBuyNow');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const purchaseForm = document.getElementById('purchaseForm');
+        const customerEmail = document.getElementById('customerEmail');
+        const btnSubmitForm = document.getElementById('btnSubmitForm');
+        const msgBox = document.getElementById('msgBox');
+        const accordionNodes = document.querySelectorAll('.accordion-node');
+        const mainProductView = document.getElementById('mainProductView');
+        
+        // Contact Selectors
+        const directContactForm = document.getElementById('directContactForm');
+        const contactName = document.getElementById('contactName');
+        const contactEmail = document.getElementById('contactEmail');
+        const contactMessage = document.getElementById('contactMessage');
+        const btnContactSubmit = document.getElementById('btnContactSubmit');
+        const contactMsgBox = document.getElementById('contactMsgBox');
+
+        // Image Swapping View Engine
+        function switchProductPhoto(thumbnailElement, highResImgUrl) {
+            document.querySelectorAll('.thumbnail-item').forEach(el => el.classList.remove('active'));
+            mainProductView.style.opacity = '0.3';
+            setTimeout(() => {
+                mainProductView.src = highResImgUrl;
+                mainProductView.style.opacity = '1';
+                thumbnailElement.classList.add('active');
+            }, 200);
+        }
+
+        // Modal Controls
+        btnBuyNow.addEventListener('click', () => {
+            modalOverlay.classList.add('open');
+            msgBox.textContent = '';
+            purchaseForm.reset();
+            btnSubmitForm.disabled = false;
+            btnSubmitForm.textContent = "Request Selection";
+        });
+
+        modalClose.addEventListener('click', () => {
+            modalOverlay.classList.remove('open');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('open');
+            }
+        });
+
+        // FAQ Toggle Logic
+        accordionNodes.forEach(node => {
+            const trigger = node.querySelector('.accordion-trigger');
+            trigger.addEventListener('click', () => {
+                const isActive = node.classList.contains('active');
+                accordionNodes.forEach(n => n.classList.remove('active'));
+                if (!isActive) {
+                    node.classList.add('active');
+                }
+            });
+        });
+
+        // FIXED FORM 1 ENGINE: URL-Encoded Form Parameters Submission
+        purchaseForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = customerEmail.value.trim();
+            if(!email) return;
+
+            btnSubmitForm.disabled = true;
+            btnSubmitForm.textContent = "Processing...";
+            msgBox.style.color = "var(--text-dark)";
+            msgBox.textContent = "Logging into heritage registry...";
+
+            // Use URLSearchParams for reliable cross-origin data transit
+            const formData = new URLSearchParams();
+            formData.append('formType', 'purchase');
+            formData.append('email', email);
+            formData.append('timestamp', new Date().toLocaleString());
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(() => {
+                msgBox.style.color = "var(--primary-green)";
+                msgBox.textContent = "✨ Selection noted. Our concierge will email you shortly.";
+                purchaseForm.reset();
+                setTimeout(() => {
+                    modalOverlay.classList.remove('open');
+                }, 2200);
+            })
+            .catch(error => {
+                console.error('Sheet Sync Error:', error);
+                msgBox.style.color = "#b22222";
+                msgBox.textContent = "Network error. Please try again.";
+                btnSubmitForm.disabled = false;
+                btnSubmitForm.textContent = "Request Selection";
+            });
+        });
+
+        // FIXED FORM 2 ENGINE: URL-Encoded Form Parameters Submission
+        directContactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = contactName.value.trim();
+            const email = contactEmail.value.trim();
+            const message = contactMessage.value.trim();
+
+            btnContactSubmit.disabled = true;
+            btnContactSubmit.textContent = "Transmitting...";
+            contactMsgBox.style.color = "var(--text-dark)";
+            contactMsgBox.textContent = "Sending your details to the atelier...";
+
+            // Use URLSearchParams for reliable cross-origin data transit
+            const formData = new URLSearchParams();
+            formData.append('formType', 'contact');
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('message', message);
+            formData.append('timestamp', new Date().toLocaleString());
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            })
+            .then(() => {
+                contactMsgBox.style.color = "var(--primary-green)";
+                contactMsgBox.textContent = "✨ Message transmitted successfully to our concierge.";
+                directContactForm.reset();
+                btnContactSubmit.disabled = false;
+                btnContactSubmit.textContent = "Send Message";
+                setTimeout(() => { contactMsgBox.textContent = ""; }, 5000);
+            })
+            .catch(error => {
+                console.error('Contact Sync Error:', error);
+                contactMsgBox.style.color = "#b22222";
+                contactMsgBox.textContent = "Transmission failed. Please check connection.";
+                btnContactSubmit.disabled = false;
+                btnContactSubmit.textContent = "Send Message";
+            });
+        });
+    </script>
+</body>
+</html>
